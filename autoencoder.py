@@ -62,7 +62,11 @@ def create():
     autoencoder = Model(input_img, decoded)
     encoder = Model(input_img, encoded)
 
-    autoencoder.compile(optimizer=TFOptimizer(tf.train.L_BFGS_Optimizer()), loss=custom_loss)
+    optimizer = tf.contrib.opt.ScipyOptimizerInterface(custom_loss, method='L-BFGS-B',
+                                                       options={'maxiter': 200,
+                                                                'disp': True})
+
+    autoencoder.compile(optimizer=TFOptimizer(optimizer), loss=custom_loss)
     return autoencoder, encoder
 
 
