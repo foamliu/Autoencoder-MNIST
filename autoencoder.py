@@ -29,12 +29,12 @@ def create():
                bias_initializer='zeros')(x)
     x = BatchNormalization()(x)
     x = MaxPooling2D((2, 2), padding='same')(x)
-    x = Conv2D(4, (3, 3), activation='relu', padding='same', kernel_initializer='he_normal',
+    x = Conv2D(2, (3, 3), activation='relu', padding='same', kernel_initializer='he_normal',
                bias_initializer='zeros')(x)
     x = BatchNormalization()(x)
     encoded = MaxPooling2D((2, 2), padding='same')(x)
 
-    x = Conv2D(4, (3, 3), activation='relu', padding='same', kernel_initializer='he_normal',
+    x = Conv2D(2, (3, 3), activation='relu', padding='same', kernel_initializer='he_normal',
                bias_initializer='zeros')(encoded)
     x = BatchNormalization()(x)
     x = UpSampling2D((2, 2))(x)
