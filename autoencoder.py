@@ -1,6 +1,8 @@
 import keras.backend as K
+import tensorflow as tf
 from keras.layers import Input, Conv2D, UpSampling2D, MaxPooling2D, BatchNormalization
 from keras.models import Model
+from keras.optimizers import TFOptimizer
 
 
 def custom_loss(y_true, y_pred):
@@ -60,7 +62,7 @@ def create():
     autoencoder = Model(input_img, decoded)
     encoder = Model(input_img, encoded)
 
-    autoencoder.compile(optimizer='nadam', loss=custom_loss)
+    autoencoder.compile(optimizer=TFOptimizer(tf.train.L_BFGS_Optimizer()), loss=custom_loss)
     return autoencoder, encoder
 
 
