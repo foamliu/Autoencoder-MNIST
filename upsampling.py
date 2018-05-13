@@ -7,7 +7,7 @@ from autoencoder import create
 
 
 if __name__ == '__main__':
-    autoencoder = create()
+    autoencoder, _ = create()
 
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
