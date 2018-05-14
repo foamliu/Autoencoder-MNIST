@@ -6,15 +6,15 @@ import numpy as np
 
 class Unpooling(Layer):
 
-    def __init__(self, orig, input_shape, **kwargs):
+    def __init__(self, orig, the_shape, **kwargs):
         self.orig = orig
-        self.input_shape = input_shape
-        super(Unpolling, self).__init__(**kwargs)
+        self.the_shape = the_shape
+        super(Unpooling, self).__init__(**kwargs)
 
     def call(self, x):
         # here we're going to reshape the data for a concatenation:
         # xReshaped and origReshaped are now split branches
-        shape = self.input_shape.copy()
+        shape = self.the_shape.copy()
         shape = list(shape)
         shape.insert(0, 1)
         shape = tuple(shape)
@@ -27,7 +27,7 @@ class Unpooling(Layer):
         together = Concatenate(axis=1)([origReshaped, xReshaped])
 
         bool_mask = Lambda(lambda t: K.greater_equal(t[:, 0], t[:, 1]),
-                           output_shape=self.input_shape)(together)
+                           output_shape=self.the_shape)(together)
         mask = Lambda(lambda t: K.cast(t, dtype='float32'))(bool_mask)
 
         x = Multiply()([mask, x])
