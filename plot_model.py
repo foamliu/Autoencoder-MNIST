@@ -1,0 +1,13 @@
+import keras
+from keras.utils import plot_model
+
+input1 = keras.layers.Input(shape=(16,))
+x1 = keras.layers.Dense(8, activation='relu')(input1)
+input2 = keras.layers.Input(shape=(32,))
+x2 = keras.layers.Dense(8, activation='relu')(input2)
+added = keras.layers.Add()([x1, x2])  # equivalent to added = keras.layers.add([x1, x2])
+
+out = keras.layers.Dense(4)(added)
+model = keras.models.Model(inputs=[input1, input2], outputs=out)
+print(model.summary())
+plot_model(model, to_file='model.svg', show_layer_names=True, show_shapes=True)
