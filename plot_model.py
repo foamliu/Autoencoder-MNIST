@@ -9,7 +9,7 @@ img_h = img_w = 224
 n_labels = 10
 img_input = Input(shape=(num_channels, img_h, img_w))
 
-x = Conv2D(512, (3, 3))(img_input)
+x = Conv2D(512, (3, 3), padding="same")(img_input)
 
 orig = x  # Save output x
 x = MaxPooling2D()(x)
@@ -31,7 +31,7 @@ bool_mask = Lambda(lambda t: K.greater_equal(t[:, 0], t[:, 1]),
 mask = Lambda(lambda t: K.cast(t, dtype='float32'))(bool_mask)
 
 x = Multiply()([mask, x])
-x = Conv2D(512, (3, 3))(x)
+x = Conv2D(512, (3, 3), padding="same")(x)
 
 x = Reshape((n_labels, img_h * img_w))(x)
 x = Permute((2, 1))(x)
