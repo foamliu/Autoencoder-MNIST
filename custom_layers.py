@@ -14,8 +14,7 @@ class Unpooling(Layer):
     def call(self, x):
         # here we're going to reshape the data for a concatenation:
         # xReshaped and origReshaped are now split branches
-        shape = self.the_shape.copy()
-        shape = list(shape)
+        shape = list(self.the_shape)
         shape.insert(0, 1)
         shape = tuple(shape)
         xReshaped = Reshape(shape)(x)
