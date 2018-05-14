@@ -33,7 +33,7 @@ x = UpSampling2D()(x)
 #
 # x = Multiply()([mask, x])
 
-x = Unpooling(orig, (img_h, img_w, num_channels))()
+x = Unpooling(orig, (img_h, img_w, num_channels))(x)
 x = Conv2D(64, (3, 3), padding="same")(x)
 
 x = Flatten()(x)
