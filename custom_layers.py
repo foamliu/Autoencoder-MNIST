@@ -1,0 +1,35 @@
+from keras import backend as K
+from keras.engine.topology import Layer
+from keras.layers import Input, Conv2D, UpSampling2D, MaxPooling2D, Reshape, Concatenate, Lambda, Multiply, Permute, Activation, Dense, Flatten
+import numpy as np
+
+
+class Unpooling(Layer):
+
+    def __init__(self, orig, input_shape, **kwargs):
+        self.orig = orig
+        self.input_shape = input_shape
+        super(Unpolling, self).__init__(**kwargs)
+
+    def call(self, x):
+        # here we're going to reshape the data for a concatenation:
+        # xReshaped and origReshaped are now split branches
+        shape = self.input_shape.copy()
+        shape = list(shape)
+        shape.insert(0, 1)
+        shape = tuple(shape)
+        xReshaped = Reshape(shape)(x)
+        origReshaped = Reshape(shape)(self.orig)
+
+        # concatenation - here, you unite both branches again
+        # normally you don't need to reshape or use the axis var,
+        # but here we want to keep track of what was x and what was orig.
+        together = Concatenate(axis=1)([origReshaped, xReshaped])
+
+        bool_mask = Lambda(lambda t: K.greater_equal(t[:, 0], t[:, 1]),
+                           output_shape=self.input_shape)(together)
+        mask = Lambda(lambda t: K.cast(t, dtype='float32'))(bool_mask)
+
+        x = Multiply()([mask, x])
+        return x
+
